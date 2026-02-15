@@ -4,16 +4,14 @@ const { body } = require('express-validator');
  * Validation rules for user registration
  */
 exports.registerValidation = [
-  body('email')
-    .trim()
-    .isEmail()
-    .withMessage('Please provide a valid email')
-    .normalizeEmail(),
+  body('email').trim().isEmail().withMessage('Please provide a valid email').normalizeEmail(),
   body('password')
     .isLength({ min: 8 })
     .withMessage('Password must be at least 8 characters long')
     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-    .withMessage('Password must contain at least one uppercase letter, one lowercase letter, and one number'),
+    .withMessage(
+      'Password must contain at least one uppercase letter, one lowercase letter, and one number'
+    ),
   body('firstName')
     .optional()
     .trim()
@@ -30,12 +28,6 @@ exports.registerValidation = [
  * Validation rules for user login
  */
 exports.loginValidation = [
-  body('email')
-    .trim()
-    .isEmail()
-    .withMessage('Please provide a valid email')
-    .normalizeEmail(),
-  body('password')
-    .notEmpty()
-    .withMessage('Password is required'),
+  body('email').trim().isEmail().withMessage('Please provide a valid email').normalizeEmail(),
+  body('password').notEmpty().withMessage('Password is required'),
 ];

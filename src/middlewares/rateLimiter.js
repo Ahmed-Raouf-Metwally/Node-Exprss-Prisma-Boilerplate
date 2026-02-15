@@ -5,8 +5,8 @@ const logger = require('../utils/logger');
  * General API Rate Limiter
  */
 const apiLimiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 15 * 60 * 1000, // 15 minutes
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS, 10) || 100,
   message: {
     success: false,
     code: 429,
@@ -41,7 +41,7 @@ const authLimiter = rateLimit({
     res.status(429).json({
       success: false,
       code: 429,
-      message: 'Too many authentication attempts, please try again after 15 minutes',
+      message: 'Too many authentication attempts, please try again after 15  minutes',
     });
   },
 });

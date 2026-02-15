@@ -1,8 +1,9 @@
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const { prisma } = require('../config/db');
 const AppError = require('../utils/AppError');
 const emailService = require('./emailService');
+const logger = require('../utils/logger');
 
 /**
  * Authentication Service
@@ -47,7 +48,7 @@ class AuthService {
       await emailService.sendWelcomeEmail(user);
     } catch (error) {
       // Log but don't fail registration
-      console.warn('Failed to send welcome email:', error.message);
+      logger.warn('Failed to send welcome email:', error.message);
     }
 
     // Generate token
@@ -84,6 +85,7 @@ class AuthService {
   /**
    * Generate JWT token
    */
+  // eslint-disable-next-line class-methods-use-this
   generateToken(userId) {
     return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN || '7d',
@@ -93,6 +95,7 @@ class AuthService {
   /**
    * Get user by ID
    */
+  // eslint-disable-next-line class-methods-use-this
   async getUserById(userId) {
     const user = await prisma.user.findUnique({
       where: { id: userId },

@@ -12,7 +12,7 @@ module.exports = {
   rules: {
     // Allow console in development (will be removed in production builds)
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
-    
+
     // Allow unused vars starting with underscore
     'no-unused-vars': [
       'error',

@@ -47,13 +47,15 @@ const startServer = async () => {
       logger.error('UNHANDLED REJECTION! 💥 Shutting down...');
       logger.error(err.name, err.message);
       logger.error(err.stack);
-      server.close(() => {
+      server.close(async () => {
+        await dbService.disconnect();
+        await cacheService.disconnect();
         process.exit(1);
       });
     });
 
     // Graceful shutdown
-    process.on('SIGTERM', async () => {
+    process.on('SIGTERM', () => {
       logger.info('👋 SIGTERM RECEIVED. Shutting down gracefully');
       server.close(async () => {
         logger.info('💥 Process terminated!');

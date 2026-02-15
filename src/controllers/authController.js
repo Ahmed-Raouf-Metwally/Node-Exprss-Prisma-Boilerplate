@@ -49,7 +49,7 @@ exports.getCurrentUser = catchAsync(async (req, res) => {
  * @route POST /api/v1/auth/logout
  * @access Protected
  */
-exports.logout = catchAsync(async (req, res) => {
+exports.logout = catchAsync((_req, res) => {
   // In JWT, logout is typically handled on the client by removing the token
   // You can implement token blacklisting here if needed
 

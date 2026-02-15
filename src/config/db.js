@@ -5,10 +5,12 @@ const logger = require('../utils/logger');
  * Prisma Client Singleton
  * Prevents multiple instances during hot-reloading in development
  */
+let prismaInstance = null;
+
 class DatabaseService {
   constructor() {
-    if (!DatabaseService.instance) {
-      this.prisma = new PrismaClient({
+    if (!prismaInstance) {
+      prismaInstance = new PrismaClient({
         log: [
           { level: 'query', emit: 'event' },
           { level: 'error', emit: 'stdout' },
@@ -18,17 +20,15 @@ class DatabaseService {
 
       // Log all queries in development
       if (process.env.NODE_ENV === 'development') {
-        this.prisma.$on('query', (e) => {
+        prismaInstance.$on('query', (e) => {
           logger.debug(`Query: ${e.query}`);
           logger.debug(`Params: ${e.params}`);
           logger.debug(`Duration: ${e.duration}ms`);
         });
       }
-
-      DatabaseService.instance = this;
     }
 
-    return DatabaseService.instance;
+    this.prisma = prismaInstance;
   }
 
   /**

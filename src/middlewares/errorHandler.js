@@ -34,8 +34,7 @@ const handlePrismaKnownError = (error) => {
  */
 const handleJWTError = () => new AppError('Invalid token. Please login again', 401);
 
-const handleJWTExpiredError = () =>
-  new AppError('Your token has expired. Please login again', 401);
+const handleJWTExpiredError = () => new AppError('Your token has expired. Please login again', 401);
 
 /**
  * Send Error Response in Development
@@ -67,7 +66,8 @@ const sendErrorProd = (err, res) => {
 /**
  * Global Error Handler Middleware
  */
-const errorHandler = (err, req, res, next) => {
+// eslint-disable-next-line no-unused-vars
+const errorHandler = (err, req, res, _next) => {
   let error = { ...err };
   error.message = err.message;
   error.statusCode = err.statusCode || 500;

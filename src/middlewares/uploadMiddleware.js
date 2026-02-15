@@ -32,7 +32,7 @@ const fileFilter = (req, file, cb) => {
     return cb(null, true);
   }
 
-  cb(
+  return cb(
     new AppError(
       'Invalid file type. Only JPEG, PNG, GIF, PDF, DOC, and DOCX files are allowed',
       400
@@ -46,7 +46,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage,
   limits: {
-    fileSize: parseInt(process.env.MAX_FILE_SIZE) || 5 * 1024 * 1024, // 5MB default
+    fileSize: parseInt(process.env.MAX_FILE_SIZE, 10) || 5 * 1024 * 1024, // 5MB default
   },
   fileFilter,
 });
@@ -63,7 +63,7 @@ const imageFilter = (req, file, cb) => {
     return cb(null, true);
   }
 
-  cb(new AppError('Invalid file type. Only image files are allowed', 400));
+  return cb(new AppError('Invalid file type. Only image files are allowed', 400));
 };
 
 /**
@@ -72,7 +72,7 @@ const imageFilter = (req, file, cb) => {
 const uploadImage = multer({
   storage,
   limits: {
-    fileSize: parseInt(process.env.MAX_FILE_SIZE) || 5 * 1024 * 1024,
+    fileSize: parseInt(process.env.MAX_FILE_SIZE, 10) || 5 * 1024 * 1024,
   },
   fileFilter: imageFilter,
 });

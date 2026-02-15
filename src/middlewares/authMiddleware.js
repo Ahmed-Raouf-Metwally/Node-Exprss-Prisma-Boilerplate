@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { prisma } = require('../config/db');
 const AppError = require('../utils/AppError');
-const ApiResponse = require('../utils/ApiResponse');
 
 /**
  * Async handler to catch errors in async route handlers
@@ -17,7 +16,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   // 1) Get token from header
   let token;
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-    token = req.headers.authorization.split(' ')[1];
+    [, token] = req.headers.authorization.split(' ');
   }
 
   if (!token) {
@@ -64,16 +63,14 @@ exports.protect = catchAsync(async (req, res, next) => {
  * Restrict access to specific roles
  * @param  {...any} roles - Allowed roles (e.g., 'ADMIN', 'MODERATOR')
  */
-exports.restrictTo = (...roles) => {
-  return (req, res, next) => {
+exports.restrictTo =
+  (...roles) =>
+  (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      return next(
-        new AppError('You do not have permission to perform this action', 403)
-      );
+      return next(new AppError('You do not have permission to perform this action', 403));
     }
-    next();
+    return next();
   };
-};
 
 /**
  * Optional authentication - Attach user if token exists, but don't require it
@@ -81,7 +78,7 @@ exports.restrictTo = (...roles) => {
 exports.optionalAuth = catchAsync(async (req, res, next) => {
   let token;
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-    token = req.headers.authorization.split(' ')[1];
+    [, token] = req.headers.authorization.split(' ');
   }
 
   if (!token) {
@@ -108,5 +105,5 @@ exports.optionalAuth = catchAsync(async (req, res, next) => {
     // Invalid token, proceed without user
   }
 
-  next();
+  return next();
 });

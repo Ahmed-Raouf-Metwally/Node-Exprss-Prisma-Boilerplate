@@ -10,7 +10,7 @@ class EmailService {
     // Create reusable transporter
     this.transporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
-      port: parseInt(process.env.EMAIL_PORT),
+      port: parseInt(process.env.EMAIL_PORT, 10),
       secure: process.env.EMAIL_SECURE === 'true',
       auth: {
         user: process.env.EMAIL_USER,
@@ -45,7 +45,7 @@ class EmailService {
   /**
    * Send Welcome Email
    */
-  async sendWelcomeEmail(user) {
+  sendWelcomeEmail(user) {
     const subject = `Welcome to ${process.env.APP_NAME}!`;
     const html = `
       <div style="font-family: Arial, sans-serif; padding: 20px;">
@@ -66,7 +66,7 @@ class EmailService {
   /**
    * Send Password Reset Email
    */
-  async sendPasswordResetEmail(user, resetToken) {
+  sendPasswordResetEmail(user, resetToken) {
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
     const subject = 'Password Reset Request';
     const html = `
@@ -91,7 +91,7 @@ class EmailService {
   /**
    * Send Email Verification
    */
-  async sendVerificationEmail(user, verificationToken) {
+  sendVerificationEmail(user, verificationToken) {
     const verifyUrl = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
     const subject = 'Email Verification';
     const html = `
