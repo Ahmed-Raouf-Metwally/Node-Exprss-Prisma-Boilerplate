@@ -1,0 +1,55 @@
+// Prisma Schema for Node Express Boilerplate
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// User Model
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  firstName String?  @map("first_name")
+  lastName  String?  @map("last_name")
+  role      Role     @default(USER)
+  isActive  Boolean  @default(true) @map("is_active")
+  isVerified Boolean @default(false) @map("is_verified")
+  
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations (example)
+  // posts     Post[]
+  
+  @@map("users")
+  @@index([email])
+}
+
+// Enum for User Roles
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
+}
+
+// Example: Post Model (commented out - add as needed)
+// model Post {
+//   id        String   @id @default(uuid())
+//   title     String
+//   content   String?  @db.Text
+//   published Boolean  @default(false)
+//   authorId  String   @map("author_id")
+//   
+//   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+//   
+//   createdAt DateTime @default(now()) @map("created_at")
+//   updatedAt DateTime @updatedAt @map("updated_at")
+//   
+//   @@map("posts")
+//   @@index([authorId])
+// }
